@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - 56-Maktab</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            color: #0f172a;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2563eb;
+            margin-bottom: 40px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        input, textarea {
+            padding: 12px 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover { background: #1d4ed8; }
+
+        .list {
+            margin-top: 30px;
+        }
+
+        .item {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item h3 {
+            margin: 0 0 8px 0;
+            color: #1e40af;
+        }
+
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover { background: #dc2626; }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Admin Panel - Ma’lumotlar boshqaruvi</h1>
+
+        <form id="infoForm">
+            <input type="text" id="title" placeholder="Sarlavha (masalan: Ta’lim tili)" required>
+            <textarea id="desc" placeholder="Ma’lumot..." rows="4" required></textarea>
+            <button type="submit">Yangi ma’lumot qo‘shish</button>
+        </form>
+
+        <div class="list" id="infoList"></div>
+
+        <a href="index.html" class="back-link">Asosiy sahifaga qaytish →</a>
+    </div>
+
+    <script>
+        const form = document.getElementById('infoForm');
+        const list = document.getElementById('infoList');
+
+        let items = JSON.parse(localStorage.getItem('schoolInfo')) || [
+            { title: "Manzil", desc: "Namangan viloyati, Yangiqo‘rg‘on tumani, Poromon QFY, Nov MFY, Sharshara ko‘chasi" },
+            { title: "Tashkil topgan yili", desc: "1978-yil" },
+            { title: "O‘quvchilar soni", desc: "taxminan 280–340 nafar" },
+            { title: "Ta’lim tili", desc: "qirg‘iz" },
+            { title: "Pedagoglar soni", desc: "24–30 nafar (bir necha oliy toifali)" }
+        ];
+
+        function renderList() {
+            list.innerHTML = '';
+            items.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'item';
+                div.innerHTML = `
+                    <div>
+                        <h3>${item.title}</h3>
+                        <p>${item.desc}</p>
+                    </div>
+                    <button class="delete-btn" onclick="deleteItem(${index})">O‘chirish</button>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            const title = document.getElementById('title').value.trim();
+            const desc = document.getElementById('desc').value.trim();
+            if (title && desc) {
+                items.push({ title, desc });
+                localStorage.setItem('schoolInfo', JSON.stringify(items));
+                renderList();
+                form.reset();
+                alert('Ma’lumot qo‘shildi!');
+            }
+        });
+
+        window.deleteItem = function(index) {
+            if (confirm('Bu ma’lumotni o‘chirmoqchimisiz?')) {
+                items.splice(index, 1);
+                localStorage.setItem('schoolInfo', JSON.stringify(items));
+                renderList();
+            }
+        };
+
+        renderList();
+    </script>
+</body>
+</html>
