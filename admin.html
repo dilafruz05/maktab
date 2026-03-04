@@ -16,20 +16,22 @@
             font-family: 'Inter', sans-serif;
             background: #f1f5f9;
             color: #0f172a;
-            padding: 40px 20px;
+            padding: clamp(20px, 5vw, 40px) clamp(10px, 4vw, 20px);
+            min-height: 100vh;
         }
 
         h1 {
             text-align: center;
             color: #2563eb;
-            margin-bottom: 40px;
+            font-size: clamp(1.8rem, 6vw, 2.5rem);
+            margin-bottom: clamp(20px, 5vw, 40px);
         }
 
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             background: white;
-            padding: 30px;
+            padding: clamp(20px, 5vw, 30px);
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
@@ -37,24 +39,26 @@
         form {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin-bottom: 40px;
+            gap: clamp(12px, 3vw, 15px);
+            margin-bottom: clamp(30px, 6vw, 40px);
         }
 
         input, textarea {
-            padding: 12px 16px;
+            padding: clamp(10px, 3vw, 12px) clamp(12px, 4vw, 16px);
             border: 1px solid #cbd5e1;
             border-radius: 8px;
-            font-size: 1rem;
+            font-size: clamp(0.95rem, 3.5vw, 1rem);
+            width: 100%;
         }
 
         button {
             background: #2563eb;
             color: white;
             border: none;
-            padding: 14px;
+            padding: clamp(12px, 4vw, 14px);
             border-radius: 8px;
             font-weight: 600;
+            font-size: clamp(1rem, 3.5vw, 1.1rem);
             cursor: pointer;
             transition: background 0.3s;
         }
@@ -62,31 +66,41 @@
         button:hover { background: #1d4ed8; }
 
         .list {
-            margin-top: 30px;
+            margin-top: clamp(20px, 5vw, 30px);
         }
 
         .item {
             background: #f8fafc;
-            padding: 16px;
+            padding: clamp(12px, 3vw, 16px);
             border-radius: 12px;
-            margin-bottom: 12px;
+            margin-bottom: clamp(10px, 3vw, 12px);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .item-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .item h3 {
-            margin: 0 0 8px 0;
+            margin: 0;
             color: #1e40af;
+            font-size: clamp(1.1rem, 4vw, 1.3rem);
         }
 
         .delete-btn {
             background: #ef4444;
             color: white;
             border: none;
-            padding: 8px 14px;
+            padding: clamp(8px, 3vw, 10px) clamp(12px, 4vw, 14px);
             border-radius: 6px;
             cursor: pointer;
+            font-size: clamp(0.9rem, 3vw, 1rem);
         }
 
         .delete-btn:hover { background: #dc2626; }
@@ -94,10 +108,23 @@
         .back-link {
             display: block;
             text-align: center;
-            margin-top: 30px;
+            margin-top: clamp(20px, 5vw, 30px);
             color: #2563eb;
             text-decoration: none;
             font-weight: 500;
+            font-size: clamp(1rem, 3.5vw, 1.1rem);
+        }
+
+        @media (max-width: 600px) {
+            .item-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .delete-btn {
+                width: 100%;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -135,11 +162,11 @@
                 const div = document.createElement('div');
                 div.className = 'item';
                 div.innerHTML = `
-                    <div>
+                    <div class="item-header">
                         <h3>${item.title}</h3>
-                        <p>${item.desc}</p>
+                        <button class="delete-btn" onclick="deleteItem(${index})">O‘chirish</button>
                     </div>
-                    <button class="delete-btn" onclick="deleteItem(${index})">O‘chirish</button>
+                    <p>${item.desc}</p>
                 `;
                 list.appendChild(div);
             });
